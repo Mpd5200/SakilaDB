@@ -145,7 +145,6 @@ JOIN country ON
 city.country_id = country.country_id; 
 
 
-
 SELECT categoty.name, SUM(payment.amount) AS 'Revenue'
 FROM categoty 
 INNER JOIN staff ON
@@ -154,4 +153,35 @@ INNER JOIN payment ON
 payment.staff_id = staff.staff_id
 GROUP BY store_id; 
 
+
+SELECT category.name, sum(payment.amount) as 'REV Per Category' FROM category 
+JOIN film_category 
+ON category.category_id = film_category.category_id
+JOIN inventory 
+ON film_category.film_id = inventory.film_id
+JOIN rental 
+ON rental.inventory_id = inventory.inventory_id
+JOIN payment 
+ON payment.rental_id = rental.rental_id
+GROUP BY name
+ORDER BY SUM(payment.amount) DESC
+LIMIT 5;
+
+CREATE VIEW top_5 AS 
+SELECT category.name, sum(payment.amount) as 'REV Per Category' FROM category 
+JOIN film_category 
+ON category.category_id = film_category.category_id
+JOIN inventory 
+ON film_category.film_id = inventory.film_id
+JOIN rental 
+ON rental.inventory_id = inventory.inventory_id
+JOIN payment 
+ON payment.rental_id = rental.rental_id
+GROUP BY name
+ORDER BY SUM(payment.amount) DESC
+LIMIT 5;
+
+SELECT * FROM top_5; 
+
+DROP VIEW top_5; 
 
